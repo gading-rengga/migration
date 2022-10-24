@@ -22,6 +22,27 @@ class Blueprint extends CI_Model
         return $query->result_array();
     }
 
+    // ==============Pindah Data===============
+    public function get_post_in()
+    {
+        $sql = "SELECT * FROM `sdn-post` WHERE var IN (SELECT reff WHERE reff != 0) GROUP BY var";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function insert_pindah_data($data)
+    {
+        $db2 = $this->load->database('migration', TRUE);
+        $db2->where('ID', $data['ID']);
+        $query = $db2->get('sdn-post');
+        if ($query->num_rows() > 0) {
+            print 'Data Sudah Ada : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
+        } else {
+            print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
+            $db2->insert('sdn-post', $data);
+        }
+    }
+
     // ==============Pemindahan Dana===============
     public function get_cash_in()
     {
