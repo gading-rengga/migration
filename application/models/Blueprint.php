@@ -25,7 +25,7 @@ class Blueprint extends CI_Model
     // ==============Pindah Data===============
     public function get_post_in()
     {
-        $sql = "SELECT * FROM `sdn-post` WHERE var IN (SELECT reff WHERE reff != 0) GROUP BY var";
+        $sql = "SELECT * FROM `sdn-post` WHERE var IN (SELECT var FROM `sdn-post` WHERE reff = 0 GROUP BY var)";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
@@ -35,8 +35,14 @@ class Blueprint extends CI_Model
         $db2 = $this->load->database('migration', TRUE);
         $db2->where('ID', $data['ID']);
         $query = $db2->get('sdn-post');
+
         if ($query->num_rows() > 0) {
+            $where = array(
+                'ID' => $data['ID']
+            );
             print 'Data Sudah Ada : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
+            $db2->where($where);
+            $db2->update('sdn-post', $data);
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
