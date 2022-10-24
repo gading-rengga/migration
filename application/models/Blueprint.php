@@ -37,12 +37,7 @@ class Blueprint extends CI_Model
         $query = $db2->get('sdn-post');
 
         if ($query->num_rows() > 0) {
-            $where = array(
-                'ID' => $data['ID']
-            );
             print 'Data Sudah Ada : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
-            $db2->where($where);
-            $db2->update('sdn-post', $data);
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
