@@ -48,6 +48,10 @@
             <h1>====Migration KMI====</h1>
         </div>
         <div class="w-25 text-center">
+            <h2>Pindah data</h2>
+            <a class="btn" href="<?= base_url('Pindah_data') ?>">Migrate</a>
+        </div>
+        <div class="w-25 text-center">
             <h2>Pemindahan Dana</h2>
             <a class="btn" href="<?= base_url('Pemindahan_dana') ?>">Migrate</a>
         </div>

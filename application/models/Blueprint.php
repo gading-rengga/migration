@@ -4,6 +4,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Blueprint extends CI_Model
 {
     // =================Global Script=================
+    public function get_post($id = 0)
+    {
+        $this->db->select('ID');
+        $this->db->where('ID', $id);
+        $this->db->from('sdn-post');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_meta($id = 0)
     {
         $this->db->select('*');

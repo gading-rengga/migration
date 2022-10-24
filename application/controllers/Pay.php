@@ -12,40 +12,10 @@ class Pay extends CI_Controller
     public function index()
     {
         $get_paid = $this->Blueprint->get_paid_pay();
-        $order = array(
-            '_shipping_price', '_discount', '_resi', '_expedition', '_payment_method'
-        );
-
-        $purchase = array(
-            '_total', '_no_note', '_project', '_moneyG', '_brand', '_discount'
-        );
-
-        $cash_in = array(
-            ''
-        );
-
-        // Invoice_order tidak ada dalam sobad_post
-        // $invoice_purchase = array(
-        //     ''
-        // );
 
         foreach ($get_paid as $value) {
-            $meta = $this->Blueprint->get_meta($value['reff']);
-            foreach ($meta as $val) {
-                if (in_array($val['meta_key'], $order)) {
-                    $var = 'order';
-                    // var_dump($val);
-                } elseif (in_array($val['meta_key'], $purchase)) {
-                    $var = 'purchase';
-                    // var_dump($val);
-                } elseif (in_array($val['meta_key'], $cash_in)) {
-                    $var = 'cash_in';
-                    // var_dump($val);
-                } elseif (!in_array($val['meta_key'], $order) && $val['ID'] == '') {
-                    $var = 'non_order';
-                    // var_dump($val);
-                }
-            }
+            $var = $this->_check_sesuai($value['reff']);
+
             $data = array(
                 'ID'        => $value['reff'],
                 'post_date' => $value['post_date'],
@@ -57,5 +27,69 @@ class Pay extends CI_Controller
             );
             $this->Blueprint->insert_pay($data);
         }
+    }
+
+    public function _check_sesuai($reff=0){
+        $var = 'cash_in';
+        $n_ord = $n_purc = $n_inv = 0;
+
+        $order = array(
+            '_shipping_price', '_discount', '_resi', '_expedition', '_payment_method'
+        );
+
+        $purchase = array(
+            '_total', '_no_note', '_project', '_moneyG', '_brand', '_discount'
+        );
+
+        $invoice = array(
+            '_total','_no_note','_no_faktur','_due_date','_mode_ppn','_ppn'
+        );
+
+        $meta = $this->Blueprint->get_meta($reff);
+        $check = array_filter($meta);
+
+        if(empty($check)){
+            return $var;
+        }
+
+        foreach ($meta as $key) {
+            if(in_array($key['meta_key'], $order)){
+                $n_ord += 1;
+            }
+
+            if(in_array($key['meta_key'], $purchase)){
+                $n_purc += 1;
+            }
+
+            if(in_array($key['meta_key'], $invoice)){
+                $n_inv += 1;
+            }
+        }
+
+        $n_ord /= count($order);
+        $n_inv /= count($invoice);
+        $n_purc /= count($purchase);
+
+        $nilai = 0;
+        if($n_ord>=$n_inv){
+            $nilai = $n_ord;
+            $var = 'order';
+        }else{
+            $nilai = $n_inv;
+            $var = 'invoice_purchase';
+        }
+
+        if($nilai<$n_purc){
+            $var = 'purchase';
+        }
+
+        // check ID
+        $post = $this->Blueprint->get_post($reff);
+        $check = array_filter($post);
+        if($var=='order' && empty($check)){
+            $var = 'non_order';
+        }
+
+        return $var;
     }
 }
