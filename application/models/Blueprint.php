@@ -41,6 +41,7 @@ class Blueprint extends CI_Model
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
+            // var_dump($data);
         }
     }
 
@@ -65,6 +66,7 @@ class Blueprint extends CI_Model
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
+            // var_dump($data);
         }
     }
 
@@ -89,6 +91,7 @@ class Blueprint extends CI_Model
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
+            // var_dump($data);
         }
     }
 
@@ -97,7 +100,7 @@ class Blueprint extends CI_Model
     public function get_paid_pay()
     {
         $this->db->select('*');
-        $this->db->where('var', 'paid');
+        $this->db->where('var', 'pay');
         $this->db->from('sdn-post');
         $query = $this->db->get();
         return $query->result_array();
@@ -113,6 +116,7 @@ class Blueprint extends CI_Model
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
+            // var_dump($data);
         }
     }
 
@@ -145,7 +149,30 @@ class Blueprint extends CI_Model
         } else {
             print 'Data Berhasil diInsert : <br>' . "ID = " . $data['ID'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
             $db2->insert('sdn-post', $data);
+            // var_dump($data);
         }
+    }
+
+    // ===================Quotation===============
+    public function insert_quo($data)
+    {
+        $db2 = $this->load->database('migration', TRUE);
+        $db2->where('title', $data['title']);
+        $query = $db2->get('sdn-post');
+        if ($query->num_rows() > 0) {
+            print 'Data Sudah Ada : <br>' . "ID = " . $data['title'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
+        } else {
+            print 'Data Berhasil diInsert : <br>' . "ID = " . $data['title'] . "<br>" . "Var = " . $data['var']  . '<br>' . '<br>';
+            // $db2->insert('sdn-post', $data);
+            // var_dump($data);
+        }
+    }
+    public function get_meta_quo()
+    {
+        $this->db->select('*');
+        $this->db->from('sdn-post-meta');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
 
